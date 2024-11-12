@@ -1,0 +1,62 @@
+#message {
+    color: white;
+    border-radius: 15px 0 0 15px;
+    background-color: blue;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    border-color: white;
+    border-width: 15px;
+}
+
+#text {
+    background-color: blue;
+    width: 90%;
+    align-self: center;
+    margin-top: 100px;
+}
+
+#course_form {
+    width: 80%;
+    height: 80vh;
+    border-radius: 15px;
+    align-self: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: flex;
+    flex-direction: row;
+}
+
+#course_input {
+    background-color: white;
+    border-radius: 0 15px 15px 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.create {
+    text-align: center;
+}
+.course_field {
+    width: 80%;
+    height: 30%;
+    margin-left: 10%;
+    align-content: space-evenly;
+    justify-self: center;
+}
+
+.course_submit {
+    width: 25%;
+    margin: 25px 38%;
+    align-content: center;
+    justify-content: center;
+}
+
+#page {
+    background-color: gray;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
