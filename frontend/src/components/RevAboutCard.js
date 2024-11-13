@@ -17,7 +17,7 @@ const RevAboutCard = (props) => {
         <Image 
           src={props.src}
           width={props.width || 450}
-          height={300}
+          height={props.height ||300}
           />
       </div>
     );

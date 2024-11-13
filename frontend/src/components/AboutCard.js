@@ -8,7 +8,7 @@ const AboutCard = (props) => {
         <Image 
           src={props.src}
           width={ props.width || 450}
-          height={300}
+          height={props.height || 300}
           />
         <Typography 
           variant="h4"

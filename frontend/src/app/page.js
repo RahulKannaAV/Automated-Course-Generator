@@ -46,21 +46,65 @@ const LandingPage = () => {
         padding: "50px 0",
         backgroundColor: "gray"
       }}>
-      <AboutCard 
-        src={"/pers-learn.png"}
-        textContent={"Personal Learning made easy"}
-        width={700}
-      />
+        <AboutCard 
+          src={"/pers-learn.png"}
+          textContent={"Personal Learning made easy"}
+          width={700}
+        />
 
-      <RevAboutCard 
-        src={"/track-prog.png"}
-        textContent={"Track your Learning progress to improve further"}
-      />
+        <RevAboutCard 
+          src={"/track-prog.png"}
+          textContent={"Track your Learning progress to improve further"}
+        />
 
-      <AboutCard 
-        src={"/summaries.jpeg"}
-        textContent={"Get summaries of your learning content to revise quicker"}
-      />
+        <AboutCard 
+          src={"/summaries.jpeg"}
+          textContent={"Get summaries of your learning content to revise quicker"}
+        />
+
+        <RevAboutCard 
+          src={"/Create_form.png"}
+          textContent={"Create Course plans within seconds"}
+          width={700}
+        />
+      </div>
+
+      <div>
+      <Typography
+          variant="h1"
+          color="white"
+          sx={{
+            paddingBottom: "40px",
+            fontFamily: "Inter, sans-serif",
+            width: "60%",
+            margin: "50px 20%",
+            textAlign: "center",
+            fontWeight: 500
+          }}
+          >
+            What are you waiting for?
+        </Typography>
+
+        <Typography
+          variant="h4"
+          sx={{
+            color: "white",
+            fontFamily: "Verdana",
+            fontSize: 25,
+            textAlign: "center",
+            paddingBottom: "40px"
+}}>
+            Sign up for the tool and stay tuned for further updates
+        </Typography>
+
+        <div className={styles.end_gif}>
+          <Image 
+          src={"/GIF_1.gif"} 
+          width={450}
+          height={300}
+          unoptimized={true}
+          />
+        </div>
       </div>
       
     </div>
