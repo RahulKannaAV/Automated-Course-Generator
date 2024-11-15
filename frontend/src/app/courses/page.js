@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import { styled } from '@mui/material/styles';
+import styles from "./page.module.css";
 import { Typography } from "@mui/material";
 import Link from "next/link";
 
@@ -22,7 +23,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
   const CourseDashboard = () => {
     return (
-        <div>
+        <div className={styles.course_dashboard}>
             <CourseTitleBar title={"AUTOMATED COURSE GENERATOR"} />
             <Typography
                 variant="h4"
