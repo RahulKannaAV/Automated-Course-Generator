@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import YouTube from 'react-youtube';
 
-const YouTubePlayer = (props) => {
+const CourseVideoPlayer = (props) => {
   const [startTime] = useState(props.startTime);  // in seconds (0:35)
   const [endTime] = useState(props.endTime);    // in seconds (0:40)
 
@@ -55,4 +55,4 @@ const YouTubePlayer = (props) => {
   );
 };
 
-export default YouTubePlayer;
+export default CourseVideoPlayer;
