@@ -20,5 +20,5 @@ for sub in result:
 
 print(subtitles)
 
-print("Generated Quizzes")
-print(generate_quiz(subtitles))
+# print("Generated Quizzes")
+#print(generate_quiz(subtitles))
