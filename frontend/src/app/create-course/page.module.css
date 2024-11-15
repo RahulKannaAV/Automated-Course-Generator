@@ -1,7 +1,7 @@
 #message {
     color: white;
     border-radius: 15px 0 0 15px;
-    background-color: blue;
+    background-color: darkblue;
     width: 60%;
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
 }
 
 #text {
-    background-color: blue;
+    background-color: darkblue;
     width: 90%;
     align-self: center;
     margin-top: 100px;

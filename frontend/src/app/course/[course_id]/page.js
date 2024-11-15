@@ -20,7 +20,7 @@ import Typography from '@mui/material/Typography';
 import CourseVideoPlayer from '@/components/Video';
 import { useParams } from 'next/navigation';
 
-const drawerWidth = 240;
+const drawerWidth = 450;
 
 function CoursePage(props) {
 
