@@ -2,23 +2,30 @@
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import axios from 'axios';
+import {useRouter} from "next/navigation";
 import LoadingModal from "@/components/Modal";
 import { TextField, Typography, Button } from "@mui/material";
 
 const CourseCreation = () => {
+    const router = useRouter();
 
     const [openModal, setModal] = useState(false);
+    const [courseData, setCourseData] = useState({
+        "course_name": "",
+        "course_url": ""
+    });
 
 
     const [status, setStatus] = useState("Sit back and relax. We got this for you.");
     useEffect(() => {
         // Create EventSource instance for listening to events
         const eventSource = new EventSource('http://localhost:5000/events');
-    
+        
+        console.log(eventSource);
         // EventSource on message handler
         eventSource.onmessage = (event) => {
           const parsedData = JSON.parse(event.data);
-          console.log("Received event:", parsedData);  // Log to track event sequence
+          console.log("Received event:", parsedData.data);  // Log to track event sequence
           setStatus(parsedData.data);  // Update status based on event data
         };
     
@@ -47,18 +54,27 @@ const CourseCreation = () => {
             setModal(!openModal);
 
             // Start the task on the server
-            const result = await axios.get('http://localhost:5000/create-course');
-            console.log(result);
+            const sendResult = await axios.post("http://localhost:5000/new-course", courseData);
+            console.log(sendResult);
             // Begin listening for events if not already listening
-            if(result.status == 200) {
-                setModal(false);
-            }
+            setModal(false);
+
+            router.push("/courses");
+            
             
         } catch (error) {
             console.error("Error starting task:", error);
             setStatus("Failed to start task.");
         }
     };
+
+    const handleCourseTitle = (evt) => {
+        setCourseData({...courseData, "course_name": evt.target.value});
+    }
+
+    const handleCourseURL = (evt) => {
+        setCourseData({...courseData, "course_url": evt.target.value});
+    }
 
     return (
         <div id={styles.page}>
@@ -97,6 +113,7 @@ const CourseCreation = () => {
                             Video URL
                         </Typography>
                         <TextField 
+                            onChange={handleCourseURL}
                             fullWidth
                             placeholder="Enter Video URL"
                         />
@@ -106,6 +123,7 @@ const CourseCreation = () => {
                             Title
                         </Typography>
                         <TextField 
+                            onChange={handleCourseTitle}
                             fullWidth
                             placeholder="Enter Course Title"
                         />

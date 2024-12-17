@@ -18,7 +18,7 @@ export default function CourseCard(props) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            {props.course_name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Course plan generated on <b>{props.gen_date}</b>

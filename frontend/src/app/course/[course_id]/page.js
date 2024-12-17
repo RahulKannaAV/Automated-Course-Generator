@@ -19,16 +19,52 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CourseVideoPlayer from '@/components/Video';
 import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const drawerWidth = 450;
 
 function CoursePage(props) {
 
+  const params = useParams();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-  const [contentText, setContentText] = React.useState("Basic Content");
-  const params = useParams();
-  console.log(params);
+  const [sections, setSections] = useState([]);
+  const [course_ID, setCourseID] = useState(params.course_id);
+  const [sectionData, setSectionData] = useState({
+    section_ID: undefined,
+    video_ID: "",
+    course_ID: params.course_id,
+    section_start: 0,
+    section_end: 0,
+    section_name: "Course"
+  });
+  
+  console.log(sectionData);
+  useEffect(() => {
+    const getAllSectionIDandTitle = async() => {
+      const sectionData = await axios.get(`http://localhost:5000/sections/${course_ID}`);
+      setSections(sectionData.data);
+    }
+
+    // Getting Video ID of the course
+    const getVideoID = async() => {
+      const videoData = await axios.get(`http://localhost:5000/get-video-id`, {
+        params: {
+          courseID: sectionData.course_ID
+        }
+      });
+
+      setSectionData({...sectionData, video_ID: videoData.data});
+    }
+
+
+    getAllSectionIDandTitle();
+    getVideoID();
+    if(sectionData.sectionID !== undefined) {
+      fetchNewSection();
+    }
+  }, [])
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -45,25 +81,39 @@ function CoursePage(props) {
     }
   };
 
-  const changeContent = (content) => {
-    setContentText(content);
-  }
+      // Get section content
+      const fetchNewSection = async(content) => {
+        const [sectionID, title] = content;
+
+        const newSectionResponse = await axios.get(`http://localhost:5000/get-section-content`, {
+          params: {
+            sectionID: sectionID
+          }
+        });
+    
+        const newSectionData = newSectionResponse.data;
+        setSectionData((prevSectionData) => ({
+          ...prevSectionData,
+          section_start: newSectionData.section_start,
+          section_end: newSectionData.section_end,
+          section_name: title,
+          section_ID: sectionID,
+        }));
+      }
+
 
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
-        {['DAY 1: Introduction to Generative AI Community Course', 
-        'DAY 2: Introduction to OpenAI and understanding the OpenAI API', 
-        'DAY 3: Introduction to LangChain', 
-        'Day 4: Hugging Face API + Langchain'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => changeContent(text)}>
+        {sections.length > 0 && sections.map((cand_key, index) => (
+          <ListItem key={cand_key[1]} disablePadding>
+            <ListItemButton onClick={async() => {await fetchNewSection(cand_key);}}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={`${index+1}) ${cand_key[1]}`} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -148,12 +198,14 @@ function CoursePage(props) {
       >
         <Toolbar />
         <Typography sx={{ marginBottom: 2 }}>
-          {contentText}
+          {sectionData.section_name}
         </Typography>
         <CourseVideoPlayer 
-            startTime={25}
-            endTime={30}
-            videoID={"mEsleV16qdo"}/>
+
+            startTime={sectionData.section_start}
+            endTime={sectionData.section_end}
+            key={sectionData.section_ID}
+            videoID={sectionData.video_ID}/>
       </Box>
     </Box>
   );

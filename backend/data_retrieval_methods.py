@@ -1,6 +1,5 @@
 import re
 from youtube_transcript_api import YouTubeTranscriptApi
-from test import generate_quiz
 from typing import List, Dict
 from dotenv import load_dotenv
 import os
@@ -62,7 +61,42 @@ def get_youtube_description_text(video_id: str)->str:
 
     return text
 
+def timeframe_to_seconds(timeframe_string: str):
+    parts = timeframe_string.split(":")[::-1]
+    total_seconds = 0
 
+    for idx, part in enumerate(parts):
+        total_seconds += int(part)*(60**idx)
+    return(total_seconds)
+
+def prepare_section_list(course_id: int,
+                         timestamps: Dict):
+    section_list = []
+
+    all_sections = list(timestamps.keys())
+    for idx in range(len(all_sections)-1):
+        section_dict = dict()
+
+        # Section Course ID
+        section_dict["course_id"] = course_id
+
+        # Section start time
+        section_dict["section_start"] = timeframe_to_seconds(all_sections[idx])
+
+        # Section End time
+        section_dict["section_end"] = timeframe_to_seconds(all_sections[idx+1])
+
+        # Section Title
+        section_dict["section_name"] = timestamps[all_sections[idx]]
+
+        section_dict["section_completion"] = False
+
+        section_list.append(section_dict)
+
+    return section_list
+
+
+timeframe_to_seconds("01:26:56")
 
 
 
@@ -72,8 +106,13 @@ def get_youtube_description_text(video_id: str)->str:
 
 
 # ----------- EXPERIMENTATION  ----------------------
-video_id = "iuK05gGBzJc"
+"""video_id = "F0GQ0l2NfHA"
 # Get subtitles upto Chemistry basics
 from_seconds = 1334
 to_seconds = 1952
-get_subtitles(video_id, from_seconds, to_seconds)
+result = get_subtitles(video_id, from_seconds, to_seconds)
+desc = get_youtube_description_text(video_id)
+
+timestamps = get_section_timestamps(desc)
+
+print(f"Timestamps of Video {video_id}: {timestamps}")"""

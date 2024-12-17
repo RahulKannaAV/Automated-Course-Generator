@@ -1,10 +1,15 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 
 const CourseVideoPlayer = (props) => {
-  const [startTime] = useState(props.startTime);  // in seconds (0:35)
-  const [endTime] = useState(props.endTime);    // in seconds (0:40)
+  const [startTime, setStartTime] = useState(props.startTime);  // in seconds (0:35)
+  const [endTime, setEndTime] = useState(props.endTime);    // in seconds (0:40)
+
+  useEffect(() => {
+    setStartTime(props.startTime);
+    setEndTime(props.setEndTime);
+  }, [props.startTime, props.endTime, props.sectionID]);
 
   const onReady = (event) => {
     const player = event.target;

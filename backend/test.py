@@ -13,3 +13,5 @@ def generate_quiz(query):
 
   for chunk in response:
     print(chunk['message']['content'], end='', flush=True)
+
+generate_quiz("Hello World in Rust")

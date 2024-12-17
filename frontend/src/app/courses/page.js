@@ -4,10 +4,12 @@ import CourseTitleBar from "@/components/CourseTitleBar";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
+import {useState, useEffect} from "react";
 import { styled } from '@mui/material/styles';
 import styles from "./page.module.css";
 import { Typography } from "@mui/material";
 import Link from "next/link";
+import axios from "axios";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -22,6 +24,18 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
   const CourseDashboard = () => {
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const getAllCourseMetadata = async() => {
+            const coursesJson = await axios.get("http://localhost:5000/get-courses");
+            setCourses(coursesJson.data);
+        }
+
+        getAllCourseMetadata();
+    }, [])
+
+
     return (
         <div className={styles.course_dashboard}>
             <CourseTitleBar title={"AUTOMATED COURSE GENERATOR"} />
@@ -43,13 +57,17 @@ const Item = styled(Paper)(({ theme }) => ({
                     boxShadow: "none"
                 }}
                 >
-                    <Link href="/course/2">
-                        <CourseCard 
-                            gen_date={"02-05-2024"}
-                            total_lectures={"10"}
-                            completed_lectures={"5"}
-                        />
-                    </Link>
+                    {courses.map((course, key) => (
+                        <Link href={`/course/${course.course_id}`}>
+                            <CourseCard 
+                                course_name={course.course_name}
+                                gen_date={course.generated_date}
+                                total_lectures={"10"}
+                                completed_lectures={"5"}
+                            />
+                        </Link>
+                    ))}
+
                         
                     
                 </Grid>
