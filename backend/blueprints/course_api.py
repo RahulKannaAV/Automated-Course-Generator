@@ -43,3 +43,16 @@ def return_video_id():
     videoID = cursor.fetchone()[0]
 
     return videoID
+
+@COURSE_BLUEPRINT.route("/get-course-name")
+def return_course_name():
+    courseID = request.args.get("courseID")
+    print("Here", request.args.get("courseID"))
+    cursor = conn.cursor()
+    SQL = "SELECT course_name FROM courses WHERE course_id = %s"
+    data = [courseID]
+
+    cursor.execute(SQL, data)
+    course_name = cursor.fetchone()[0]
+
+    return course_name

@@ -27,19 +27,25 @@ def get_subtitles(video_id: str,
 
     result = YouTubeTranscriptApi.get_transcript(video_id)
 
-    # print(result)
-
 
     subtitles = []
-
+    id = 0
     for sub in result:
+        sentenceDict = dict()
         subtitleDuration = sub['start']
-        textDuration = int((sub['duration']-1)*1000)
+        textDuration = int((sub['duration']))
+        subtitleEnd = subtitleDuration + textDuration
         if (subtitleDuration > to_seconds):
             break
         else:
             if (subtitleDuration >= from_seconds and subtitleDuration <= to_seconds):
-                subtitles.extend([sub['text'], textDuration])
+                sentenceDict['text'] = sub['text']
+                sentenceDict['start'] = subtitleDuration
+                sentenceDict['end'] = subtitleEnd
+                sentenceDict['id'] = id
+                id += 1
+
+                subtitles.append(sentenceDict)
     return(subtitles)
 
 def get_section_timestamps(description_text: str) -> Dict:

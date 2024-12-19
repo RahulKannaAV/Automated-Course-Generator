@@ -1,7 +1,11 @@
 import sys
 sys.path.append("../../backend")
-from flask import request
+from flask import request, send_file
+from io import BytesIO
+from gtts import gTTS
 from backend.db_connection import conn
+from backend.subtitles import extract_section_transcript
+from backend.data_retrieval_methods import get_subtitles
 from flask import Blueprint
 # just like `app = Flask(__name__)`
 
@@ -40,3 +44,38 @@ def get_section_content():
         section_dict[field] = section_row[idx]
 
     return section_dict
+
+@SECTION_BLUEPRINT.route("/get-transcript-sequences", methods=['GET'])
+def get_sequence_for_typing():
+    course_id = request.args.get("course_id")
+    start_seconds = request.args.get("from_seconds")
+    end_seconds = request.args.get("to_seconds")
+    video_id = request.args.get("video_id")
+
+    # Get subtitle sequence for the section
+    subtitle_sequence = get_subtitles(video_id=video_id,
+                                      from_seconds=int(start_seconds),
+                                      to_seconds=int(end_seconds))
+
+    print(subtitle_sequence)
+
+    return subtitle_sequence
+
+@SECTION_BLUEPRINT.route("/play-translation", methods=['GET'])
+def get_translated_audio():
+    start_seconds = request.args.get("from_seconds")
+    end_seconds = request.args.get("to_seconds")
+    video_id = request.args.get("video_id")
+
+    # Get subtitle sequence for the section
+    section_transcript = extract_section_transcript(video_id=video_id,
+                                      from_seconds=int(start_seconds),
+                                      to_seconds=int(end_seconds))
+    mp3_fp = BytesIO()
+    tts = gTTS(section_transcript[:300], lang='en')
+    print(section_transcript[:300])
+    tts.write_to_fp(mp3_fp)
+    mp3_fp.seek(0)  # Reset the pointer to the beginning
+
+    # Send the BytesIO object as a file-like response
+    return send_file(mp3_fp, mimetype='audio/mpeg')

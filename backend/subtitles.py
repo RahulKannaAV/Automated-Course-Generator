@@ -1,24 +1,25 @@
 from youtube_transcript_api import YouTubeTranscriptApi
-from test import generate_quiz
+# from data_retrieval_methods import get_subtitles
+# Use this to generate quiz
+def extract_section_transcript(from_seconds, to_seconds, video_id):
 
-result = YouTubeTranscriptApi.get_transcript("iuK05gGBzJc")
+    result = YouTubeTranscriptApi.get_transcript(video_id=video_id)
 
-#print(result)
+    subtitles = ""
 
-# Get subtitles upto Chemistry basics
-from_seconds = 1334
-to_seconds = 1952
-subtitles = ""
+    for sub in result:
+        subtitleDuration = sub['start']
+        if(subtitleDuration>to_seconds):
+            break
+        else:
+            if(subtitleDuration>=from_seconds and subtitleDuration<=to_seconds):
+                subtitles += sub['text'] + " "
 
-for sub in result:
-    subtitleDuration = sub['start']
-    if(subtitleDuration>to_seconds):
-        break
-    else:
-        if(subtitleDuration>=from_seconds and subtitleDuration<=to_seconds):
-            subtitles += sub['text'] + " "
+    return subtitles
 
-print(subtitles)
+section_transcript = extract_section_transcript(video_id="gyMwXuJrbJQ",
+                                      from_seconds=545,
+                                      to_seconds=7276)
 
-# print("Generated Quizzes")
-#print(generate_quiz(subtitles))
+with open("big_lesson.txt", 'w') as f:
+    f.write(section_transcript)

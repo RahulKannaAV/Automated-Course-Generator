@@ -1,18 +1,50 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
 
 const CourseVideoPlayer = (props) => {
   const [startTime, setStartTime] = useState(props.startTime);  // in seconds (0:35)
   const [endTime, setEndTime] = useState(props.endTime);    // in seconds (0:40)
+  const [audio, setAudio] = useState();
+  const [videoID, setVideoID] = useState(props.videoID);
+  const audioRef = useRef(null);
+
+  console.log(audioRef)
 
   useEffect(() => {
+    const getAudioData = async() => {
+      try {
+        const response = await axios.get(`http://localhost:5000/play-translation`, {
+          responseType: "blob",
+          params: {
+            from_seconds: startTime,
+            to_seconds: endTime,
+            video_id: videoID
+          }
+        });
+        console.log("Obtained from Backend");
+        const audioSrc = URL.createObjectURL(response.data);
+        setAudio(audioSrc);
+
+          audioRef.current.load();
+          audioRef.current.play();
+        
+      } catch(e) {
+        console.error(`Error in fetching audio data: ${e}`)
+      }
+    }
+
     setStartTime(props.startTime);
     setEndTime(props.setEndTime);
+    getAudioData();
   }, [props.startTime, props.endTime, props.sectionID]);
+
+
 
   const onReady = (event) => {
     const player = event.target;
+    player.setVolume(0);
     player.seekTo(startTime); // Seek to the start time
     player.playVideo();       // Start playing
   };
@@ -30,10 +62,16 @@ const CourseVideoPlayer = (props) => {
     }
   };
 
+  const onVideoPause = (event) => {
+    if(audioRef.current) {
+      audioRef.current.pause();
+    }
+  }
+
 
   const opts = {
-    height: '390',
-    width: '640',
+    height: '576',
+    width: '1024',
     playerVars: {
       autoplay: 1,
       controls: 0,  // Allow user control to press play manually
@@ -51,12 +89,19 @@ const CourseVideoPlayer = (props) => {
   };
 
   return (
-    <YouTube
+    
+    <div>
+      <YouTube
       videoId={props.videoID}
       opts={opts}
       onReady={onReady}
       onStateChange={onStateChange}
+      onPause={onVideoPause}
     />
+    <audio ref={audioRef} controls hidden>
+      <source src={audio} type="audio/mpeg" />
+    </audio>
+    </div>
   );
 };
 

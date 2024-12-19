@@ -21,6 +21,7 @@ import CourseVideoPlayer from '@/components/Video';
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import SectionTab from '@/components/SectionTab';
 
 const drawerWidth = 450;
 
@@ -37,6 +38,7 @@ function CoursePage(props) {
     course_ID: params.course_id,
     section_start: 0,
     section_end: 0,
+    course_name: "",
     section_name: "Course"
   });
   
@@ -58,12 +60,27 @@ function CoursePage(props) {
       setSectionData({...sectionData, video_ID: videoData.data});
     }
 
+    const getCourseName = async() => {
+      const courseNameData = await axios.get("http://localhost:5000/get-course-name", {
+        params: {
+          courseID: sectionData.course_ID
+        }
+      });
+
+      setSectionData((prevSectionData) => ({
+        ...prevSectionData,
+        course_name: courseNameData.data
+      }))
+    }
+
 
     getAllSectionIDandTitle();
     getVideoID();
-    if(sectionData.sectionID !== undefined) {
+    if(sectionData.section_id !== undefined) {
       fetchNewSection();
     }
+    getCourseName();
+
   }, [])
 
   const handleDrawerClose = () => {
@@ -109,7 +126,12 @@ function CoursePage(props) {
       <List>
         {sections.length > 0 && sections.map((cand_key, index) => (
           <ListItem key={cand_key[1]} disablePadding>
-            <ListItemButton onClick={async() => {await fetchNewSection(cand_key);}}>
+            <ListItemButton 
+              onClick={async() => {await fetchNewSection(cand_key);}}
+              sx={{
+                backgroundColor: cand_key[0] == sectionData.section_ID && "lightgray"
+              }}
+              >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -156,7 +178,7 @@ function CoursePage(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Generative AI Course
+            {sectionData.course_name}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -206,6 +228,12 @@ function CoursePage(props) {
             endTime={sectionData.section_end}
             key={sectionData.section_ID}
             videoID={sectionData.video_ID}/>
+        <SectionTab 
+          courseID={sectionData.course_ID}
+          videoID={sectionData.video_ID}
+          sectionID={sectionData.section_ID}
+          startTime={sectionData.section_start}
+          endTime={sectionData.section_end}/>
       </Box>
     </Box>
   );
