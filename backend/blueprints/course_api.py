@@ -17,17 +17,19 @@ def get_fucked():
 
 @COURSE_BLUEPRINT.route("/get-courses", methods=['GET'])
 def get_all_course_metadata():
+    user_id = request.args.get("userID")
+    if(user_id is None):
+        return []
     cursor = conn.cursor()
 
-    SQL = "SELECT * FROM courses;"
-    cursor.execute(SQL)
+    SQL = "SELECT * FROM courses WHERE generated_by=(%s);"
+    cursor.execute(SQL, [user_id])
 
     courses = cursor.fetchall()
-
     courses_list = []
     for course in courses:
         course_dict = dict()
-        fields = ['course_id', 'course_name', 'video_id', 'generated_date', 'completed']
+        fields = ['course_id', 'course_name', 'video_id', 'generated_date', 'completed', 'generated_by']
         for i in range(len(course)):
             course_dict[fields[i]] = course[i]
         courses_list.append(course_dict)

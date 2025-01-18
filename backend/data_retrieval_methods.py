@@ -56,6 +56,7 @@ def get_section_timestamps(description_text: str) -> Dict:
 
     # Making dictionary from the matches
     timestamp_dict = {section[0]: section[1] for section in title_matches}
+    print(timestamp_dict)
 
     return timestamp_dict
 

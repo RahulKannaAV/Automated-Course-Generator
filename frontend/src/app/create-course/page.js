@@ -7,17 +7,21 @@ import LoadingModal from "@/components/Modal";
 import { TextField, Typography, Button } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const CourseCreation = () => {
     const router = useRouter();
     const { currentUserID } = useAuth();
 
 
+
     const [openModal, setModal] = useState(false);
     const [courseData, setCourseData] = useState({
         "course_name": "",
-        "course_url": ""
+        "course_url": "",
+        "userID": Cookies.get("userID")
     });
+
 
 
     const [status, setStatus] = useState("Sit back and relax. We got this for you.");
@@ -51,12 +55,13 @@ const CourseCreation = () => {
         return () => {
           eventSource.close();
         };
-      }, []);
+      }, [courseData]);
 
     const handleStartTask = async () => {        
         try {
-            setModal(!openModal);
 
+            setModal(!openModal);
+            
             // Start the task on the server
             const sendResult = await axios.post("http://localhost:5000/new-course", courseData);
             console.log(sendResult);

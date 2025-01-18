@@ -5,6 +5,7 @@ from flask import Flask, url_for, make_response, redirect, request, session
 from datetime import timedelta
 import os
 from flask import session, Blueprint
+from backend.user_methods import check_user, add_new_user, get_user_id
 from functools import wraps
 from backend.main import app
 def login_required(f):
@@ -59,15 +60,31 @@ def authorize():
     user = token['userinfo']
     session['email'] = user['email']
     session['username'] = user['given_name']
-    session['userID'] = "49642"
     session.permanent = True
-    print(f"After Login: {session.items()}")
-    response = make_response(redirect("http://localhost:3000"))
-    response.set_cookie("username", user["given_name"])
-    response.set_cookie("userID", session['userID'])
-  # user will return a dict of info like: email = user.get("email")
-    #Save the user info to database and login the user
+
+    userPresent = check_user(user['email'])
+
+    if(userPresent):
+        userID = get_user_id(user['email'])
+        session['userID'] = userID
+
+        print(f"After Login: {session.items()}")
+        response = make_response(redirect("http://localhost:3000"))
+        response.set_cookie("username", user["given_name"])
+        response.set_cookie("userID", session['userID'])
+
+
+    else:
+        infoDict = {"email": user["email"], "name": user["given_name"]}
+        user_id = add_new_user(infoDict)
+        session['userID'] = user_id
+
+        response = make_response(redirect("http://localhost:3000"))
+        response.set_cookie("username", user["given_name"])
+        response.set_cookie("userID", session['userID'])
+
     return response
+
 
 @AUTH_BLUEPRINT.route("/logged")
 @login_required

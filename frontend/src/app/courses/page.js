@@ -35,8 +35,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
     useEffect(() => {
         const getAllCourseMetadata = async() => {
-            const coursesJson = await axios.get("http://localhost:5000/get-courses");
+            let userID = Cookies.get("userID");
+            if(userID !== undefined) {
+            const coursesJson = await axios.get(`http://localhost:5000/get-courses?userID=${userID}`);
             setCourses(coursesJson.data);
+            }
         }
 
         getAllCourseMetadata();

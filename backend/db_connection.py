@@ -5,8 +5,19 @@ from dotenv import load_dotenv
 from typing import Tuple, List, Dict
 
 load_dotenv()
+
+
 conn = psycopg2.connect(database=os.environ['DATABASE'],
                         user=os.environ['USER'],
                         host=os.environ['HOST'],
                         password=os.environ['PASSWORD'],
                         port=os.environ['PORT'])
+
+def create_connection():
+    conn = psycopg2.connect(database=os.environ['DATABASE'],
+                            user=os.environ['USER'],
+                            host=os.environ['HOST'],
+                            password=os.environ['PASSWORD'],
+                            port=os.environ['PORT'])
+
+    return conn

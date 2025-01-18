@@ -69,6 +69,7 @@ def create_new_course():
         course_id = course_methods.insert_course_detail(data_obj)
 
         event_data.append({"data": "Extracting Timestamps"})
+        print(f"Desc Text: {video_desc_text}")
         # Extracting Timestamps from Description
         timestamp_dict = data_retrieval_methods.get_section_timestamps(video_desc_text)
 

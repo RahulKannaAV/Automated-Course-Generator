@@ -17,9 +17,6 @@ const Navbar = () => {
       window.location.href = "http://localhost:5000/logout";
     }
 
-    const createCourse = async() => {
-      window.location.href = "http://localhost:3000/create-course";
-    }
 
     useEffect(() => {
       const checkAuthStatus = () => {
@@ -61,6 +58,9 @@ const Navbar = () => {
           <Button onClick={properties.executeFunction} style={{backgroundColor: properties. buttonColor}} color={properties.textColor}>{properties.buttonText}</Button>
           <Link href="/create-course">
             <Button color="inherit">Create</Button>
+          </Link>
+          <Link href="/courses">
+            <Button color="inherit">View Courses</Button>
           </Link>          
           <Button color="inherit">About</Button>
           <Button color="inherit">How To</Button>
