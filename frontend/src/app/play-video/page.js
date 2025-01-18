@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import YouTube from 'react-youtube';
+import useAuth from '@/hooks/useAuth';
 
 const YouTubePlayer = (props) => {
   const [startTime] = useState(props.startTime);  // in seconds (0:35)
   const [endTime] = useState(props.endTime);    // in seconds (0:40)
+
+  const { currentUserID } = useAuth();
 
   const onReady = (event) => {
     const player = event.target;

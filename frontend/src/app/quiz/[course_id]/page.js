@@ -2,10 +2,13 @@
 import { Button, Typography } from "@mui/material";
 import {useState, useEffect} from "react";
 import axios from "axios";
+import useAuth from "@/hooks/useAuth";
 import styles from "./page.module.css";
 
 
 const QuizPage = () => {
+
+    const { currentUserID } = useAuth();
     const options = ['Hyper Text ML', 'High Text Mark Low', 'Hyper Text Markup Language', 'How To Make Lasagna'];
     const [stats, setStats] = useState({
         "correct": 0,

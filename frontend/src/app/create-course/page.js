@@ -5,9 +5,13 @@ import axios from 'axios';
 import {useRouter} from "next/navigation";
 import LoadingModal from "@/components/Modal";
 import { TextField, Typography, Button } from "@mui/material";
+import useAuth from "@/hooks/useAuth";
+import Link from "next/link";
 
 const CourseCreation = () => {
     const router = useRouter();
+    const { currentUserID } = useAuth();
+
 
     const [openModal, setModal] = useState(false);
     const [courseData, setCourseData] = useState({
@@ -88,7 +92,9 @@ const CourseCreation = () => {
                         marginTop: "7%",
                         marginLeft: "10%"
                     }}>
-                        ACP
+                        <Link href="/">
+                            ACG
+                        </Link>
                     </Typography>
                     <div id={styles.text}>
                         <Typography variant="h2" sx={{

@@ -11,6 +11,10 @@ from flask import Blueprint
 # just like `app = Flask(__name__)`
 COURSE_BLUEPRINT = Blueprint('course', __name__)
 
+@COURSE_BLUEPRINT.route("/fuck", methods=['GET'])
+def get_fucked():
+    return "<h1>Fuck you too</h1>"
+
 @COURSE_BLUEPRINT.route("/get-courses", methods=['GET'])
 def get_all_course_metadata():
     cursor = conn.cursor()

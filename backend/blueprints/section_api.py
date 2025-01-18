@@ -27,7 +27,6 @@ def get_all_sections(course_id):
 @SECTION_BLUEPRINT.route("/get-section-content", methods=['GET'])
 def get_section_content():
     sectionID = request.args.get("sectionID")
-    print("Sect ", sectionID)
 
     cursor = conn.cursor()
 
@@ -57,7 +56,6 @@ def get_sequence_for_typing():
                                       from_seconds=int(start_seconds),
                                       to_seconds=int(end_seconds))
 
-    print(subtitle_sequence)
 
     return subtitle_sequence
 

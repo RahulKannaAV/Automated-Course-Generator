@@ -9,17 +9,11 @@ from dotenv import load_dotenv
 import json
 import time
 import course_methods
-from blueprints.section_api import SECTION_BLUEPRINT
-from blueprints.course_api import COURSE_BLUEPRINT
-
+from datetime import timedelta
+from instance_creation import create_app
 
 load_dotenv()
-app = Flask(__name__)
-app.register_blueprint(COURSE_BLUEPRINT)
-app.register_blueprint(SECTION_BLUEPRINT)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-
+app = create_app()
 
 # Shared event data
 event_data = []

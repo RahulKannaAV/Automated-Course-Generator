@@ -22,10 +22,13 @@ import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SectionTab from '@/components/SectionTab';
+import useAuth from '@/hooks/useAuth';
 
 const drawerWidth = 450;
 
 function CoursePage(props) {
+
+  const { currentUser } = useAuth();
 
   const params = useParams();
   const [mobileOpen, setMobileOpen] = React.useState(false);

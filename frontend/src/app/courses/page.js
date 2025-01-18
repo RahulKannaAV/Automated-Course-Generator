@@ -9,7 +9,10 @@ import { styled } from '@mui/material/styles';
 import styles from "./page.module.css";
 import { Typography } from "@mui/material";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import useAuth from "@/hooks/useAuth";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -25,6 +28,10 @@ const Item = styled(Paper)(({ theme }) => ({
 
   const CourseDashboard = () => {
     const [courses, setCourses] = useState([]);
+    const {currentUserID} = useAuth();
+
+    console.log(currentUserID);
+
 
     useEffect(() => {
         const getAllCourseMetadata = async() => {

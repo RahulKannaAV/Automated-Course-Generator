@@ -6,7 +6,6 @@ import AboutCard from "@/components/AboutCard";
 import RevAboutCard from "@/components/RevAboutCard";
 
 const LandingPage = () => {
-  console.log(styles);
   return (
     <div className={styles.bg}>
       <Navbar />
@@ -22,7 +21,7 @@ const LandingPage = () => {
             fontWeight: 500
           }}
           >
-            Automated Course Planner
+            Automated Course Generator
         </Typography>
         <Typography
           variant="h4"
