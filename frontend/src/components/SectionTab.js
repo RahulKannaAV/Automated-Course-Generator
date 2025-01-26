@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import SummaryTab from './SummaryTab';
 import { TypeAnimation } from 'react-type-animation';
 import axios from 'axios';
 
@@ -37,8 +38,10 @@ function a11yProps(index) {
 }
 
 const SectionTab = (props) => {
+  console.log(props);
   const [value, setValue] = React.useState(0);
   const [sequence, setSequence] = React.useState([]);
+  const [summary, setSummary] = React.useState({});
 
 
   React.useEffect(() => {
@@ -62,7 +65,20 @@ const SectionTab = (props) => {
       }
     } 
 
+
+    const getSummaryText = async() => {
+      try {
+      const summaryResponse = await axios.get(`http://localhost:5000/generate-summary?heading=${props.heading}&section_id=${props.sectionID}&video_id=${props.videoID}&start=${props.startTime}&end=${props.endTime}`);
+      setSummary(summaryResponse.data);
+      } catch(e) {
+        console.error(`Error in fetching summary text: ${e}`);
+      }
+      
+    }
+
+
     getTranscriptSequence();
+    getSummaryText();
   }, [props.sectionID]); 
 
   const [currentSubtitles, setCurrentSubtitles] = React.useState([]);
@@ -104,7 +120,7 @@ const SectionTab = (props) => {
         References
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Summary
+        {Object.keys(summary).length == 0 ? "Generating it..." :  <SummaryTab data={summary} />}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         Test your Knowledge

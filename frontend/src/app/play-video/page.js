@@ -44,7 +44,7 @@ const YouTubePlayer = (props) => {
       rel: 0,
       iv_load_policy: 3,
       start: startTime,
-      end: endTime
+      end: endTime,
     }
   };
 

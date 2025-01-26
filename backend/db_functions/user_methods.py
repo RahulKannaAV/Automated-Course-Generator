@@ -1,6 +1,6 @@
 import logging
 
-from db_connection import create_connection
+from backend.db_functions.db_connection import create_connection
 from typing import List, Dict
 
 

@@ -37,14 +37,14 @@ const CourseVideoPlayer = (props) => {
 
     setStartTime(props.startTime);
     setEndTime(props.setEndTime);
-    getAudioData();
+    // getAudioData();
   }, [props.startTime, props.endTime, props.sectionID]);
 
 
 
   const onReady = (event) => {
     const player = event.target;
-    player.setVolume(0);
+    player.setVolume(100);
     player.seekTo(startTime); // Seek to the start time
     player.playVideo();       // Start playing
   };

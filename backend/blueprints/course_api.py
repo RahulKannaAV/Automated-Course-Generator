@@ -1,8 +1,8 @@
 import sys
 sys.path.append("../../backend")
 
-from backend.db_connection import conn
-from flask import jsonify, request
+from backend.db_functions.db_connection import create_connection
+from flask import request
 # sample_blueprint.py
 from flask import Blueprint
 
@@ -17,6 +17,7 @@ def get_fucked():
 
 @COURSE_BLUEPRINT.route("/get-courses", methods=['GET'])
 def get_all_course_metadata():
+    conn = create_connection()
     user_id = request.args.get("userID")
     if(user_id is None):
         return []
@@ -39,6 +40,7 @@ def get_all_course_metadata():
 
 @COURSE_BLUEPRINT.route("/get-video-id")
 def return_video_id():
+    conn = create_connection()
     courseID = request.args.get("courseID")
     print("Here", request.args.get("courseID"))
     cursor = conn.cursor()
@@ -52,6 +54,7 @@ def return_video_id():
 
 @COURSE_BLUEPRINT.route("/get-course-name")
 def return_course_name():
+    conn = create_connection()
     courseID = request.args.get("courseID")
     print("Here", request.args.get("courseID"))
     cursor = conn.cursor()

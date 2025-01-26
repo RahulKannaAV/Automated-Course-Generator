@@ -6,6 +6,23 @@ import ast
 # Just run the docker instance and then try to run the functions
 # Command: docker exec -it ollama ollama run llama3:8b
 
+response_format = """
+{
+  "title": "<Main Title>",
+  "sections": [
+    {
+      "title": "<Section Title>",
+      "topics": [
+        {
+          "name": "<Topic Name>",
+          "description": "<Brief explanation of the topic>",
+          "example": "<Code example illustrating the topic>"
+        }
+      ]
+    }
+  ]
+}
+"""
 
 def generate_quiz(query):
 
@@ -20,7 +37,7 @@ def generate_quiz(query):
 
     results = ""
     for chunk in response:
-      print(chunk['message']['content'], end='', flush=True)
+      # print(chunk['message']['content'], end='', flush=True)
       results += chunk['message']['content']
 
 
@@ -30,10 +47,28 @@ def generate_quiz(query):
 
     # Save it to the Database
 
-
-def get_important_keywords(paragraph):
+def generate_summary(topics):
     ollama.pull('llama3:8b')
 
+    response = ollama.chat(model='llama3:8b', messages=[
+      {
+        'role': 'user',
+        'content': f'Input data is this {topics}. These are some of the topics discussed. Generate the result with this format {response_format} ',
+
+      },
+      ], stream=True)
+
+    results = ""
+    for idx, chunk in enumerate(response):
+      # print(chunk['message']['content'], end='', flush=True)
+        results += chunk['message']['content']
+
+    return results
+
+def get_important_keywords_from_llm(paragraph):
+    ollama.pull('llama3:8b')
+
+    print("Extracting Keywords...")
     response = ollama.chat(model='llama3:8b', messages=[{
         "role": "user",
         "content": f"Extract important keywords from the given paragraph. Present it in python list format in a single line. {paragraph}"
@@ -41,7 +76,7 @@ def get_important_keywords(paragraph):
 
     generated_text = ""
     for idx, chunk in enumerate(response):
-        print(chunk['message']['content'], end='', flush=True)
+        # print(chunk['message']['content'], end='', flush=True)
         generated_text += chunk['message']['content']
 
 
@@ -87,8 +122,7 @@ def extract_list(text):
 """with open('../big_lesson.txt', 'r') as f:
     generate_quiz(f.read())"""
 
-with open("../big_lesson.txt", 'r') as f:
+"""with open("../big_lesson.txt", 'r') as f:
     keywords = get_important_keywords(f.read())
 
-print("Here bro: ", keywords)
-
+print("Here bro: ", keywords)"""

@@ -1973,4 +1973,4 @@ five, maybe say hi, in the GitHub discussions, maybe say hi
 in the community, on Twitter, on Reddit, etc, and be proud of
 just making it this far, the journey has really only just
 begun, but you've already learned so much. Let's begin the
-next section. And let's jump into the code.
+next section. And let's jump into the code. 

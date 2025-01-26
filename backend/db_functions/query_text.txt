@@ -1,0 +1,49 @@
+CREATE TABLE courses(
+	course_id BIGSERIAL PRIMARY KEY,
+	course_name TEXT NOT NULL,
+	video_id TEXT UNIQUE,
+	generated_date DATE NOT NULL,
+	completed BOOLEAN DEFAULT true,
+	generated_by BIGINT NOT NULL REFERENCES users(user_id)
+)
+
+CREATE TABLE users (
+	user_id BIGSERIAL PRIMARY KEY,
+	email_id TEXT NOT NULL UNIQUE,
+	name TEXT NOT NULL UNIQUE,
+	completed_courses BIGINT DEFAULT 0,
+	generated_courses BIGINT DEFAULT 0
+)
+
+CREATE TABLE sections (
+	section_id BIGSERIAL PRIMARY KEY,
+	course_id BIGINT NOT NULL REFERENCES courses(course_id),
+	notes TEXT,
+	section_name TEXT NOT NULL,
+	section_start BIGINT NOT NULL,
+	section_end BIGINT NOT NULL,
+	section_completed BOOLEAN DEFAULT true
+);
+
+CREATE TABLE summary (
+	summary_id BIGSERIAL PRIMARY KEY,
+	section_id BIGINT NOT NULL REFERENCES sections(section_id),
+	summary_text TEXT NOT NULL
+)
+
+CREATE TABLE reference (
+	reference_id BIGSERIAL PRIMARY KEY,
+	section_id BIGINT NOT NULL REFERENCES sections(section_id),
+	reference_heading TEXT NOT NULL,
+	reference_url TEXT NOT NULL
+)
+
+SELECT * FROM users;
+
+SELECT * FROM courses;
+
+SELECT * FROM sections;
+
+SELECT * FROM summary;
+
+SELECT * FROM reference;

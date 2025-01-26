@@ -1,6 +1,7 @@
 import datetime
 from typing import Tuple, List, Dict
-from db_connection import conn
+from backend.db_functions.db_connection import conn
+
 
 def insert_course_detail(data_obj: Dict):
     curr = conn.cursor()

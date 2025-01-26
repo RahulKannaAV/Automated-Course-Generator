@@ -2,8 +2,8 @@ import sys
 sys.path.append("../../backend")
 from flask import request, send_file
 from io import BytesIO
-from gtts import gTTS
-from backend.db_connection import conn
+# from gtts import gTTS
+from backend.db_functions.db_connection import create_connection
 from backend.subtitles import extract_section_transcript
 from backend.data_retrieval_methods import get_subtitles
 from flask import Blueprint
@@ -13,6 +13,7 @@ SECTION_BLUEPRINT = Blueprint('section', __name__)
 
 @SECTION_BLUEPRINT.route("/sections/<course_id>", methods=['GET'])
 def get_all_sections(course_id):
+    conn = create_connection()
     cursor = conn.cursor()
 
     # Getting all sections that are from the course
@@ -26,6 +27,7 @@ def get_all_sections(course_id):
 
 @SECTION_BLUEPRINT.route("/get-section-content", methods=['GET'])
 def get_section_content():
+    conn = create_connection()
     sectionID = request.args.get("sectionID")
 
     cursor = conn.cursor()
@@ -46,6 +48,7 @@ def get_section_content():
 
 @SECTION_BLUEPRINT.route("/get-transcript-sequences", methods=['GET'])
 def get_sequence_for_typing():
+    conn = create_connection()
     course_id = request.args.get("course_id")
     start_seconds = request.args.get("from_seconds")
     end_seconds = request.args.get("to_seconds")
@@ -59,7 +62,7 @@ def get_sequence_for_typing():
 
     return subtitle_sequence
 
-@SECTION_BLUEPRINT.route("/play-translation", methods=['GET'])
+"""@SECTION_BLUEPRINT.route("/play-translation", methods=['GET'])
 def get_translated_audio():
     start_seconds = request.args.get("from_seconds")
     end_seconds = request.args.get("to_seconds")
@@ -77,3 +80,4 @@ def get_translated_audio():
 
     # Send the BytesIO object as a file-like response
     return send_file(mp3_fp, mimetype='audio/mpeg')
+"""

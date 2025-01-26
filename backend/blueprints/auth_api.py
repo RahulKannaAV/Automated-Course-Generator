@@ -1,11 +1,9 @@
 
 from authlib.integrations.flask_client import OAuth
-from authlib.oauth2.client import OAuth2Client
-from flask import Flask, url_for, make_response, redirect, request, session
-from datetime import timedelta
+from flask import url_for, make_response, redirect
 import os
 from flask import session, Blueprint
-from backend.user_methods import check_user, add_new_user, get_user_id
+from backend.db_functions.user_methods import check_user, add_new_user, get_user_id
 from functools import wraps
 from backend.main import app
 def login_required(f):

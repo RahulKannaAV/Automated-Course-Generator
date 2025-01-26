@@ -1,15 +1,10 @@
-import datetime
 import data_retrieval_methods
-import desc_extractor
-import section_methods
-from classes.MessageAnnouncer import MessageAnnouncer
-from flask import Flask, request, jsonify, Response, make_response
-from flask_cors import CORS, cross_origin
+from flask import request, jsonify, Response
+from flask_cors import cross_origin
 from dotenv import load_dotenv
 import json
 import time
-import course_methods
-from datetime import timedelta
+from backend.db_functions import course_methods, section_methods, db_connection
 from instance_creation import create_app
 
 load_dotenv()

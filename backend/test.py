@@ -2,8 +2,8 @@ import ollama
 
 
 def generate_quiz(query):
-  ollama.pull('llama3')
-  response = ollama.chat(model='llama3', messages=[
+  ollama.pull('llama3:8b')
+  response = ollama.chat(model='llama3:8b', messages=[
     {
       'role': 'user',
       'content': f'Generate 5 quiz questions related to this. {query}',

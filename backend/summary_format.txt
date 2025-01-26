@@ -1,0 +1,15 @@
+{
+  "title": "Revision Summary",
+  "sections": [
+    {
+      "title": "<Section Title>",
+      "topics": [
+        {
+          "name": "<Topic Name>",
+          "description": "<Brief explanation of the topic>",
+          "example": "<Example illustrating the topic>"
+        }
+      ]
+    }
+  ]
+}

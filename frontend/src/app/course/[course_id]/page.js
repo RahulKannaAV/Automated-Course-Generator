@@ -232,6 +232,7 @@ function CoursePage(props) {
             key={sectionData.section_ID}
             videoID={sectionData.video_ID}/>
         <SectionTab 
+          heading={sectionData.section_name}
           courseID={sectionData.course_ID}
           videoID={sectionData.video_ID}
           sectionID={sectionData.section_ID}
