@@ -1,11 +1,12 @@
 "use client"
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import Recommendation from '@/components/Recommendation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import { School } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
@@ -18,12 +19,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CourseVideoPlayer from '@/components/Video';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SectionTab from '@/components/SectionTab';
 import useAuth from '@/hooks/useAuth';
 import Link from 'next/link';
+import { Router } from 'next/router';
 
 const drawerWidth = 450;
 
@@ -35,6 +37,7 @@ function CoursePage(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [sections, setSections] = useState([]);
+  const [recommendations, setRecommendations] = useState(false);
   const [course_ID, setCourseID] = useState(params.course_id);
   const [sectionData, setSectionData] = useState({
     section_ID: undefined,
@@ -46,6 +49,7 @@ function CoursePage(props) {
     section_name: "Course"
   });
   
+
   console.log(sectionData);
   useEffect(() => {
     const getAllSectionIDandTitle = async() => {
@@ -96,6 +100,10 @@ function CoursePage(props) {
     setIsClosing(false);
   };
 
+  const handleRecommendations = () => {
+    setRecommendations(!recommendations);
+  }
+
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
@@ -104,6 +112,7 @@ function CoursePage(props) {
 
       // Get section content
       const fetchNewSection = async(content) => {
+        setRecommendations(false);
         const [sectionID, title] = content;
 
         const newSectionResponse = await axios.get(`http://localhost:5000/get-section-content`, {
@@ -134,7 +143,7 @@ function CoursePage(props) {
               onClick={async() => {
                 await fetchNewSection(cand_key);}}
               sx={{
-                backgroundColor: cand_key[0] == sectionData.section_ID && "lightgray"
+                backgroundColor: (cand_key[0] == sectionData.section_ID && !recommendations) && "lightgray"
               }}
               >
               <ListItemIcon>
@@ -147,11 +156,15 @@ function CoursePage(props) {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['Course Recommendations', 'Trash', 'Spam'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton 
+            onClick={handleRecommendations} 
+            sx={{
+              backgroundColor: (recommendations && index==0) && "lightgray"
+            }}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <School /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -221,7 +234,8 @@ function CoursePage(props) {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      { !recommendations ?
+      (<Box
         component="main"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
@@ -242,7 +256,10 @@ function CoursePage(props) {
           sectionID={sectionData.section_ID}
           startTime={sectionData.section_start}
           endTime={sectionData.section_end}/>
-      </Box>
+      </Box>): (
+        <Box>
+        <Recommendation />
+      </Box>)}
     </Box>
   );
 }

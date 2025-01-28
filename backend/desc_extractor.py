@@ -5,17 +5,13 @@ import os
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 
-def get_section_timestamps(text: str) -> Dict:
-    pattern = r"(?:\s*⌨️?\s*|\s*⭐️?\s*)?\(?(\d{1,2}:\d{2}(?::\d{2})?)\)?\s*[-:]*\s*(.+)"
-
-    # Find all matches of the pattern in the text
-    title_matches = re.findall(pattern, text)
-
-    # Making dictionary from the matches
-    timestamp_dict = {section[0]: section[1] for section in title_matches}
-
-    return timestamp_dict
-
+def get_section_timestamps(description: str) -> Dict:
+    pattern = r"(?P<time>(?:\d{1,3}:)*\d{1,2}:\d{1,2})[- )]*(?P<chapter>.*)"
+    # Extracting matches into a dictionary
+    matches = re.findall(pattern, description, re.MULTILINE)
+    chapter_dict = {time: chapter for time, chapter in matches}
+    print(chapter_dict)
+    return chapter_dict
 
 load_dotenv()
 """
