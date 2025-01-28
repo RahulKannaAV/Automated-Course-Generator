@@ -79,7 +79,7 @@ function CoursePage(props) {
 
     getAllSectionIDandTitle();
     getVideoID();
-    if(sectionData.section_id !== undefined) {
+    if(sectionData.section_ID !== undefined) {
       fetchNewSection();
     }
     getCourseName();
@@ -130,7 +130,8 @@ function CoursePage(props) {
         {sections.length > 0 && sections.map((cand_key, index) => (
           <ListItem key={cand_key[1]} disablePadding>
             <ListItemButton 
-              onClick={async() => {await fetchNewSection(cand_key);}}
+              onClick={async() => {
+                await fetchNewSection(cand_key);}}
               sx={{
                 backgroundColor: cand_key[0] == sectionData.section_ID && "lightgray"
               }}
@@ -226,7 +227,6 @@ function CoursePage(props) {
           {sectionData.section_name}
         </Typography>
         <CourseVideoPlayer 
-
             startTime={sectionData.section_start}
             endTime={sectionData.section_end}
             key={sectionData.section_ID}
@@ -234,6 +234,7 @@ function CoursePage(props) {
         <SectionTab 
           heading={sectionData.section_name}
           courseID={sectionData.course_ID}
+          courseName={sectionData.course_name}
           videoID={sectionData.video_ID}
           sectionID={sectionData.section_ID}
           startTime={sectionData.section_start}

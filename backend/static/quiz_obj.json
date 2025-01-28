@@ -1,0 +1,17 @@
+{
+  "topic_title": "<Topic Title>",
+  "questions": [
+    {
+      "question_text": "<Question 1>",
+      "options": ["<List of options>"],
+      "answer_option": 0,
+      "difficulty": "<very easy or easy or moderate or hard or very hard>"
+    },
+    {
+      "question_text": "<Question 2>",
+      "options": ["<List of options>"],
+      "answer_option": 2,
+      "difficulty": "<very easy or easy or moderate or hard or very hard>"
+    }
+  ]
+}

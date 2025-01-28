@@ -1,17 +1,20 @@
 import ollama
-
+import json
+from timeit import default_timer as timer
 
 def generate_quiz(query):
-  ollama.pull('llama3:8b')
-  response = ollama.chat(model='llama3:8b', messages=[
-    {
-      'role': 'user',
-      'content': f'Generate 5 quiz questions related to this. {query}',
+  start = timer()
+  print("Generating....")
+  response_generated = ollama.generate(format="json",
+                                       model="llama3:8b",
+                                       stream=False,
+                                       prompt=f"Generate summary for {query} concepts in JSON response")
+  print("Generated successfully.")
 
-    },
-  ], stream=True)
+  json_response = json.loads(response_generated.model_dump_json())
 
-  for chunk in response:
-    print(chunk['message']['content'], end='', flush=True)
+  print(json_response['response'], type(json_response))
+  end = timer()
 
+  print(f"Total time taken: {end-start} seconds")
 generate_quiz("Hello World in Rust")

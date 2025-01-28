@@ -22,8 +22,8 @@
 }
 
 .quiz_card {
-    width: 700px;
-    height: 480px;
+    width: 100%;
+    height: 100%;
     background-image: url('../../../../public/Quiz_BG.png');
 }
 

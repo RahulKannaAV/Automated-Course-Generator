@@ -1,8 +1,11 @@
 "use client";
 import * as React from 'react';
+import QuizCard from './QuizCard';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import ReferenceTab from './ReferenceTab';
 import Box from '@mui/material/Box';
 import SummaryTab from './SummaryTab';
 import { TypeAnimation } from 'react-type-animation';
@@ -41,7 +44,6 @@ const SectionTab = (props) => {
   console.log(props);
   const [value, setValue] = React.useState(0);
   const [sequence, setSequence] = React.useState([]);
-  const [summary, setSummary] = React.useState({});
 
 
   React.useEffect(() => {
@@ -66,19 +68,10 @@ const SectionTab = (props) => {
     } 
 
 
-    const getSummaryText = async() => {
-      try {
-      const summaryResponse = await axios.get(`http://localhost:5000/generate-summary?heading=${props.heading}&section_id=${props.sectionID}&video_id=${props.videoID}&start=${props.startTime}&end=${props.endTime}`);
-      setSummary(summaryResponse.data);
-      } catch(e) {
-        console.error(`Error in fetching summary text: ${e}`);
-      }
-      
-    }
+
 
 
     getTranscriptSequence();
-    getSummaryText();
   }, [props.sectionID]); 
 
   const [currentSubtitles, setCurrentSubtitles] = React.useState([]);
@@ -108,7 +101,7 @@ const SectionTab = (props) => {
 
   console.log(sequence, currentSubtitles);
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' }} key={props.sectionID}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="References" {...a11yProps(0)} />
@@ -116,14 +109,30 @@ const SectionTab = (props) => {
           <Tab label="Test your Knowledge" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        References
+      <CustomTabPanel  value={value} index={0}>
+        <ReferenceTab heading={props.heading}
+           sectionID={props.sectionID}
+           videoID={props.videoID}
+           start={props.startTime}
+           end={props.endTime}/>
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        {Object.keys(summary).length == 0 ? "Generating it..." :  <SummaryTab data={summary} />}
+      <CustomTabPanel  value={value} index={1}>
+        
+        <SummaryTab 
+        heading={props.heading}
+         sectionID={props.sectionID}
+          videoID={props.videoID} 
+          startTime={props.startTime}
+          endTime={props.endTime} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Test your Knowledge
+      <CustomTabPanel   value={value} index={2}>
+        <QuizCard 
+          sectionID={props.sectionID} 
+          quizHeading={props.heading}
+          videoID={props.videoID}
+          startTime={props.startTime}
+          endTime={props.endTime}
+          courseName={props.courseName}/>
       </CustomTabPanel>
     </Box>
   );

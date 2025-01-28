@@ -38,6 +38,20 @@ CREATE TABLE reference (
 	reference_url TEXT NOT NULL
 )
 
+CREATE TABLE quizzes(
+	quiz_id BIGSERIAL PRIMARY KEY,
+	section_id BIGINT NOT NULL,
+	quiz_question TEXT NOT NULL,
+	correct_option INT NOT NULL
+)
+
+CREATE TABLE choices(
+	choice_id BIGSERIAL PRIMARY KEY,
+	quiz_id BIGINT NOT NULL REFERENCES quizzes(quiz_id),
+	option_id INT NOT NULL,
+	option_text TEXT NOT NULL
+)
+
 SELECT * FROM users;
 
 SELECT * FROM courses;

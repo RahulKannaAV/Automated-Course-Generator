@@ -50,10 +50,12 @@ def generate_quiz(query):
 def generate_summary(topics):
     ollama.pull('llama3:8b')
 
+
+
     response = ollama.chat(model='llama3:8b', messages=[
       {
         'role': 'user',
-        'content': f'Input data is this {topics}. These are some of the topics discussed. Generate the result with this format {response_format} ',
+        'content': f'Input data is this {topics}. Give your answer summary on these for top 10 important topics in the given input. Generate the result with this format {response_format} ',
 
       },
       ], stream=True)
