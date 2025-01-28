@@ -23,6 +23,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SectionTab from '@/components/SectionTab';
 import useAuth from '@/hooks/useAuth';
+import Link from 'next/link';
 
 const drawerWidth = 450;
 
@@ -182,7 +183,9 @@ function CoursePage(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {sectionData.course_name}
+            <Link href="/courses">
+              {sectionData.course_name}
+            </Link>
           </Typography>
         </Toolbar>
       </AppBar>
